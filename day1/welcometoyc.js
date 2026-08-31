@@ -1,1 +1,3 @@
-console.log(Math.random(1, 100), "Hello World");
+// console.log("Hello youcode :)");
+
+console.log("// run your code to see output here");
