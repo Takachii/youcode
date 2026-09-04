@@ -26,7 +26,7 @@ function capitalizeName(name) {
     let Space = CName.indexOf(" ")
     let First = CName[0].toUpperCase()
     let FirstFull = First + CName.slice(1, Space)
-    let Last = CName.slice(CName.indexOf(" ") + 1, CName.indexOf(" ") + 2).toUpperCase()
+    let Last = CName.slice(Space + 1, Space + 2).toUpperCase()
     let LastFull = Last + CName.slice(Space + 2)
 
     return FirstFull + " " + LastFull
