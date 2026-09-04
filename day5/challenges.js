@@ -69,3 +69,41 @@ function countLetterText(text) {
 }
 
 countLetterText("Hello Youcode SAS")
+
+function countVowels(text) {
+
+    let count = 0;
+    let vowels = "aeiou";
+
+    for (i=0; i < text.length; i++) {
+        if (!vowels.include(text[i])) continue;
+        count++
+    }
+
+    return count
+
+}
+
+function reversWord(text) {
+    
+    let result = "";
+
+    for (let i = text.length - 1 ; i >= 0; i--) {
+        result += text[i];
+    }
+
+    return result
+
+}
+
+function countNonVowel(text) {
+    
+    let count = 0;
+    let vowels = "aeiou";
+
+    for (let i = 0; i < text.length; i++)
+        if (!vowels.includes(text[i])) count++
+
+    return count
+
+}
