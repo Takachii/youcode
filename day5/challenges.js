@@ -45,3 +45,27 @@ function reverseString(text) {
 }
 
 console.log(reverseString("Hello Youcode"))
+
+function countLetterText(text) {
+
+    let cache = "";
+
+    for (let i=0; i<text.length; i++) {
+
+        if (!cache.includes(text[i])) {
+
+            let count = 0
+            cache += text[i]
+  
+            for (let j=0; j<text.length; j++) 
+                text[j] === text[i] ? count++ : count
+
+            console.log(text[i], count)
+
+        }
+
+    }
+
+}
+
+countLetterText("Hello Youcode SAS")
