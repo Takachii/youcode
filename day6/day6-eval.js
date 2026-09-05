@@ -45,7 +45,7 @@ for (i=1; i<=workoutMinutes.length; i++) {
 
 console.log("--- Enhanced review ---")
 
-for (i=1; i<=workoutMinutes.length; i++) {
+for (let i=1; i<=workoutMinutes.length; i++) {
     if (workoutMinutes[i-1] > 80) {
         console.log(`Day ${i} : ${workoutMinutes[i-1]} min - New personal record! Stopping review.`)
         break
@@ -84,5 +84,39 @@ function countIntenseDays(arr) {
 }
 
 console.log("Intense days:", countIntenseDays(workoutMinutes))
+
+// Bonus Step 1
+
+function shortestNonRestDay(arr) {
+    let min = arr[0];
+    for (let i=0; i<arr.length; i++) if (arr[i]>0 && arr[i]<min) min = arr[i];
+    return min;
+}
+
+console.log("Shortest non-rest workout:", shortestNonRestDay(workoutMinutes))
+
+// Bonus Step 2
+
+function hasEnoughRestDays(arr, minRestDays) {
+
+    let count = 0;
+    for (let i=0; i<arr.length; i++) if (arr[i] === 0) count++
+    return count === minRestDays
+
+}
+
+console.log("Meets rest requirement (2):", hasEnoughRestDays(workoutMinutes, 2))
+
+// Bonus Step 3
+
+const classifyDayArrow = (minutes) => {
+    if (minutes === 0) return "Rest"
+    else if (minutes >= 1 && minutes <= 45) return "Light"
+    else return "Intense"
+}
+
+console.log("Arrow classify 0:", classifyDayArrow(0))
+console.log("Arrow classify 30:", classifyDayArrow(30))
+console.log("Arrow classify 90:", classifyDayArrow(90))
 
 // Fin
