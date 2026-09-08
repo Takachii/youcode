@@ -107,3 +107,38 @@ function countNonVowel(text) {
     return count
 
 }
+
+let text = "Hello Word Im in Youcode My Level is SAS";
+
+function reversWord(word) {
+
+    let result = "";
+
+    for (let i = word.length - 1 ; i >= 0; i--) {
+        result += word[i];
+    }
+
+    return result
+
+}
+
+function isPalindromic(word) { return word === reversWord(word) }
+
+function countLogestPalindromic(text) {
+
+    let count = 0;
+    let arr = text.trim().toLowerCase().split(" ")
+    let high = "";
+
+    for (let i=0; i<arr.length; i++)
+        if (isPalindromic(arr[i])) {
+            if (arr[i].length > high.length) {
+                high=arr[i];
+            }
+        }
+
+    return high.length > 0 ? high : "Invalid Find Logest Palindromic !";
+
+}
+
+console.log(countLogestPalindromic(text))
