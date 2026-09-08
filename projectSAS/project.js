@@ -1,6 +1,6 @@
 // Project Youcode Fin SAS 1 (Railway Manager): Hamza Elamyn
 
-var prompt = require('prompt-sync')();
+var prompt = require('prompt-sync')({ sigint: true });
 
 const trips = [
     {
@@ -185,7 +185,10 @@ const trips = [
     }
 ];
 
-function menuPrincipal() {
+const tickets = [];
+
+function menuPrincipal() 
+{
 
     console.log("");
     console.log("=================================");
@@ -205,34 +208,114 @@ function menuPrincipal() {
 
     while(true) {
         
-        let input = prompt("Votre choix :", true);
-        if (!input || input.length === 0 || input === "0") break;
-        else if (input === "1") ListTrajets(trips);
-
+        let input = prompt("Votre choix : ");
+        if (input === "0") break;
+        else if (input === "1") {
+            listTrips(trips); 
+            break;
+        }
+        else if (input === "2") {
+            buyTicket();
+            break;
+        }
     }
 
 
 }
 
-function ListTrajets(arr) {
+function listTrips(arr) 
+{
 
-    console.log("")
-    console.log("=== TRAJETS DISPONIBLES ===")
+    console.log("");
+    console.log("=== TRAJETS DISPONIBLES ===");
 
     for (let i=0; i<arr.length; i++) {
-        console.log("")
-        console.log(`#${i+1} ${arr[i].departure} → ${arr[i].destination}`)
-        console.log(`Départ : ${arr[i].departureTime}`)
-        console.log(`Arrivée : ${arr[i].arrivalTime}`)
-        console.log(`Prix : ${arr[i].price} DH`)
-        console.log(`Places disponibles : ${arr[i].availableSeats}`)
+        console.log("");
+        console.log(`#${i+1} ${arr[i].departure} → ${arr[i].destination}`);
+        console.log(`Départ : ${arr[i].departureTime}`);
+        console.log(`Arrivée : ${arr[i].arrivalTime}`);
+        console.log(`Prix : ${arr[i].price} DH`);
+        console.log(`Places disponibles : ${arr[i].availableSeats}`);
     }
 
-    menuPrincipal()
+    menuPrincipal();
 
 }
 
+function buyTicket() {
+
+    let ticketID, ticketName;
+
+    while(true) {
+
+        ticketName = prompt("Nom du passager : ");
+        if (ticketName.length === 0) {
+            console.log("Veuillez écrire le nom correctement !");
+            buyTicket();
+        }
+
+        ticketName = ticketName.trim()
+        break;
+
+    }
+    
+    while(true) {
+
+        ticketID = prompt("Identifiant du trajet : ");
+        if (ticketID.length === 0 || Number(ticketID) <= 0 )  {
+            console.log("Veuillez saisir un numéro valide.");
+            buyTicket();
+        }
+
+        ticketID = Number(ticketID)
+        break;
+
+    }
+
+    let tripObject;
+    for (let value of trips) {
+        if (value.id === ticketID) {
+            tripObject = value;
+            break;
+        }
+    }
+
+    if (!tripObject || typeof tripObject !== "object") {
+        console.log("");
+        console.log("Trajet introuvable.");
+        menuPrincipal();
+    } else if (tripObject.availableSeats <= 0) { 
+        console.log("");
+        console.log("Train complet.");
+        menuPrincipal();
+    }
+
+    let myTicketID = tickets.length + 1;
+    tickets.push({
+        id: myTicketID,
+        passengerName: ticketName,
+        tripId: ticketID,
+        seatNumber: 1,
+        price: tripObject.price
+    })
+
+    console.log("");
+    console.log("Ticket acheté avec succès.");
+
+    for (let value of tickets) {
+        if (value.id === myTicketID) {
+            console.log(`Ticket #${value.id}`);
+            console.log(`Passager : ${value.passengerName}`);
+            console.log(`Trajet : ${tripObject.departure} → ${tripObject.destination}`);
+            console.log(`Place : ${value.seatNumber}`);
+            console.log(`Prix : ${value.price} DH`);
+        }
+    }
+
+    menuPrincipal();
+
+}
 
 // Start Project
 
-menuPrincipal()
+menuPrincipal();
