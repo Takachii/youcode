@@ -1,4 +1,4 @@
-// Project Youcode SAS: Hamza Elamyn
+// Project Youcode SAS (Railway Manager): Hamza Elamyn
 
 var prompt = require('prompt-sync')();
 
@@ -202,6 +202,8 @@ function menuPrincipal() {
     console.log("7. Trier les trajets");
     console.log("0. Quitter");
     console.log("");
+
+    let input = prompt("Votre choix :");
 
 }
 
