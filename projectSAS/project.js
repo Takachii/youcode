@@ -1,4 +1,4 @@
-// Project Youcode SAS (Railway Manager): Hamza Elamyn
+// Project Youcode Fin SAS 1 (Railway Manager): Hamza Elamyn
 
 var prompt = require('prompt-sync')();
 
@@ -203,9 +203,35 @@ function menuPrincipal() {
     console.log("0. Quitter");
     console.log("");
 
-    let input = prompt("Votre choix :");
+    while(true) {
+        
+        let input = prompt("Votre choix :", true);
+        if (!input || input.length === 0 || input === "0") break;
+        else if (input === "1") ListTrajets(trips);
+
+    }
+
 
 }
+
+function ListTrajets(arr) {
+
+    console.log("")
+    console.log("=== TRAJETS DISPONIBLES ===")
+
+    for (let i=0; i<arr.length; i++) {
+        console.log("")
+        console.log(`#${i+1} ${arr[i].departure} → ${arr[i].destination}`)
+        console.log(`Départ : ${arr[i].departureTime}`)
+        console.log(`Arrivée : ${arr[i].arrivalTime}`)
+        console.log(`Prix : ${arr[i].price} DH`)
+        console.log(`Places disponibles : ${arr[i].availableSeats}`)
+    }
+
+    menuPrincipal()
+
+}
+
 
 // Start Project
 
