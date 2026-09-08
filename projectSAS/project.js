@@ -217,9 +217,11 @@ function menuPrincipal()
         else if (input === "2") {
             buyTicket();
             break;
+        } else if (input === "3") {
+            listTickets(tickets);
+            break;
         }
     }
-
 
 }
 
@@ -242,7 +244,18 @@ function listTrips(arr)
 
 }
 
-function buyTicket() {
+function getTripFromID(id)
+{
+    for (let value of trips) {
+        if (value.id === id) {
+            return value;
+        }
+    }
+    return false
+}
+
+function buyTicket() 
+{
 
     let ticketID, ticketName;
 
@@ -272,13 +285,7 @@ function buyTicket() {
 
     }
 
-    let tripObject;
-    for (let value of trips) {
-        if (value.id === ticketID) {
-            tripObject = value;
-            break;
-        }
-    }
+    let tripObject = getTripFromID(ticketID);
 
     if (!tripObject || typeof tripObject !== "object") {
         console.log("");
@@ -316,6 +323,25 @@ function buyTicket() {
 
 }
 
-// Start Project
+function listTickets(list)
+{
+    console.log("")
+    console.log("=== TICKETS ===")
+
+    for (let value of list) {
+        let tripObject = getTripFromID(value.tripId)
+        if (tripObject) {
+            console.log("")
+            console.log(`Ticket #${value.id}`)
+            console.log(`Passager : ${value.passengerName}`)
+            console.log(`Trajet : ${tripObject.departure} → ${tripObject.destination}`)
+            console.log(`Place : ${value.seatNumber}`)
+            console.log(`Prix : ${value.price} DH`)
+        }
+    }
+
+    menuPrincipal();
+
+}
 
 menuPrincipal();
