@@ -181,7 +181,7 @@ const trips = [
         departureTime: "19:00",
         arrivalTime: "22:00",
         price: 95,
-        availableSeats: 50
+        availableSeats: 2
     }
 ];
 
@@ -190,11 +190,11 @@ const tickets = [];
 function menuPrincipal() 
 {
 
-    console.log("");
+    console.log();
     console.log("=================================");
     console.log("        RAILWAY MANAGER");
     console.log("=================================");
-    console.log("");
+    console.log();
 
     console.log("1. Afficher les trajets");
     console.log("2. Acheter un ticket");
@@ -204,23 +204,27 @@ function menuPrincipal()
     console.log("6. Filtrer les trajets");
     console.log("7. Trier les trajets");
     console.log("0. Quitter");
-    console.log("");
+    console.log();
 
     while(true) {
         
         let input = prompt("Votre choix : ");
+        
         if (input === "0") break;
         else if (input === "1") {
             listTrips(trips); 
             break;
-        }
-        else if (input === "2") {
+        } else if (input === "2") {
             buyTicket();
             break;
         } else if (input === "3") {
             listTickets(tickets);
             break;
+        } else if (input === "4") {
+            deleteTicket()
+            break;
         }
+
     }
 
 }
@@ -228,11 +232,11 @@ function menuPrincipal()
 function listTrips(arr) 
 {
 
-    console.log("");
+    console.log();
     console.log("=== TRAJETS DISPONIBLES ===");
 
     for (let i=0; i<arr.length; i++) {
-        console.log("");
+        console.log();
         console.log(`#${i+1} ${arr[i].departure} → ${arr[i].destination}`);
         console.log(`Départ : ${arr[i].departureTime}`);
         console.log(`Arrivée : ${arr[i].arrivalTime}`);
@@ -246,12 +250,8 @@ function listTrips(arr)
 
 function getTripFromID(id)
 {
-    for (let value of trips) {
-        if (value.id === id) {
-            return value;
-        }
-    }
-    return false
+    for (let value of trips) if (value.id === id) return value;
+    return false;
 }
 
 function buyTicket() 
@@ -264,40 +264,44 @@ function buyTicket()
         ticketName = prompt("Nom du passager : ");
         if (ticketName.length === 0) {
             console.log("Veuillez écrire le nom correctement !");
-            buyTicket();
+        } else {
+            ticketName = ticketName.trim()
+            break;
         }
-
-        ticketName = ticketName.trim()
-        break;
 
     }
     
     while(true) {
 
         ticketID = prompt("Identifiant du trajet : ");
-        if (ticketID.length === 0 || Number(ticketID) <= 0 )  {
-            console.log("Veuillez saisir un numéro valide.");
-            buyTicket();
-        }
-
         ticketID = Number(ticketID)
-        break;
+    
+        if (ticketID <= 0 )  {
+            console.log("Veuillez saisir un numéro valide.");
+        } else {
+            break;
+        }
 
     }
 
     let tripObject = getTripFromID(ticketID);
 
     if (!tripObject || typeof tripObject !== "object") {
-        console.log("");
+        console.log();
         console.log("Trajet introuvable.");
         menuPrincipal();
-    } else if (tripObject.availableSeats <= 0) { 
-        console.log("");
+    } 
+
+    if (tripObject.availableSeats <= 0) { 
+        console.log();
         console.log("Train complet.");
         menuPrincipal();
     }
 
+    tripObject.availableSeats-=1;
+
     let myTicketID = tickets.length + 1;
+    
     tickets.push({
         id: myTicketID,
         passengerName: ticketName,
@@ -306,8 +310,9 @@ function buyTicket()
         price: tripObject.price
     })
 
-    console.log("");
+    console.log();
     console.log("Ticket acheté avec succès.");
+    console.log();
 
     for (let value of tickets) {
         if (value.id === myTicketID) {
@@ -325,21 +330,72 @@ function buyTicket()
 
 function listTickets(list)
 {
-    console.log("")
-    console.log("=== TICKETS ===")
+    console.log();
+    console.log("=== TICKETS ===");
 
     for (let value of list) {
-        let tripObject = getTripFromID(value.tripId)
+        let tripObject = getTripFromID(value.tripId);
         if (tripObject) {
-            console.log("")
-            console.log(`Ticket #${value.id}`)
-            console.log(`Passager : ${value.passengerName}`)
-            console.log(`Trajet : ${tripObject.departure} → ${tripObject.destination}`)
-            console.log(`Place : ${value.seatNumber}`)
-            console.log(`Prix : ${value.price} DH`)
+            console.log();
+            console.log(`Ticket #${value.id}`);
+            console.log(`Passager : ${value.passengerName}`);
+            console.log(`Trajet : ${tripObject.departure} → ${tripObject.destination}`);
+            console.log(`Place : ${value.seatNumber}`);
+            console.log(`Prix : ${value.price} DH`);
         }
     }
 
+    if (list.length === 0) {
+        console.log();
+        console.log("Aucun ticket enregistré.");
+    }
+
+    menuPrincipal();
+
+}
+
+function getTicketFromID(id)
+{
+    for (let value of tickets) if (value.id === id) return value;
+    return false
+}
+
+function getTicketIndexFromID(id)
+{
+    for (let i=0; i<tickets.length; i++) if (tickets[i].id === id) return i;
+    return -1;
+}
+
+function deleteTicket()
+{
+
+    console.log();
+
+    let ticketID;
+    while(true) {
+        ticketID = prompt("Identifiant du ticket : ");
+        ticketID = Number(ticketID)
+        break;
+    }
+
+    let ticketObject = getTicketFromID(ticketID);
+    if (!ticketObject) {
+        console.log();
+        console.log("Ticket introuvable.");
+        menuPrincipal();
+    }
+
+    let ticketIndex = getTicketIndexFromID(ticketID);
+    if (ticketIndex === -1) {
+        console.log();
+        console.log("Ticket introuvable.");
+        menuPrincipal();
+    }
+
+    tickets.splice(ticketIndex, 1);
+
+    console.log();
+    console.log("Ticket annulé avec succès.");
     menuPrincipal();
 
 }
