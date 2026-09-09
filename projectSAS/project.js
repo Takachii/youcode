@@ -187,7 +187,7 @@ const trips = [
 
 const tickets = [];
 
-function menuPrincipal() 
+function menuPrincipal()
 {
 
     console.log();
@@ -280,7 +280,8 @@ function buyTicket()
     let ticketID, ticketName;
 
     while(true) {
-        ticketName = prompt("Nom du passager : ").trim();
+        ticketName = prompt("Nom du passager : ").trim().toLowerCase();
+        ticketName = ticketName[0].toUpperCase() + ticketName.slice(1).toLowerCase()
         if (ticketName.length === 0) console.log("Veuillez écrire le nom correctement !");
         break;
     }
@@ -417,7 +418,8 @@ function findTicket()
     
     let passagerName;
     while(true) {
-        passagerName = prompt("Nom du passager : ").trim();
+        passagerName = prompt("Nom du passager : ").trim().toLowerCase();
+        passagerName = passagerName[0].toUpperCase() + passagerName.slice(1).toLowerCase()
         break;
     }
 
@@ -445,7 +447,7 @@ function filterCity()
     let cityName;
     while(true) {
         cityName = prompt("Ville de départ : ").trim().toLowerCase();
-        cityName = cityName[0].toUpperCase() + cityName.slice(1)
+        cityName = cityName[0].toUpperCase() + cityName.slice(1).toLowerCase()
         break;
     }
 
@@ -511,21 +513,43 @@ function getTopTicketSells()
 {
 
     let top = 0;
-    let ticketObject=null;
+    let ticketObject=[];
 
     for (let value of tickets) {
         if (getTotalTicketsFromTripID(value.tripId) > top) {
             top = getTotalTicketsFromTripID(value.tripId);
-            ticketObject = value;
+            ticketObject = [];
+            ticketObject.push(value);
+        } else if (getTotalTicketsFromTripID(value.tripId) === top) {
+            ticketObject.push(value);
         }
     }
 
-    if (ticketObject) {
-        let tripObject = getTripFromID(ticketObject.tripId);
-        console.log("\nTrajet le plus vendu :\n");
-        console.log(`${tripObject.departure} → ${tripObject.destination}`);
-        console.log(top, "tickets vendus")
+    console.log("Trajet le plus vendu :\n")
+    
+    let cachePrints=[];
+
+    for (let value of ticketObject) {
+        
+        let cachePrintFound=false;
+
+        for (let data of cachePrints) {
+            if (data === value.tripId) {
+                cachePrintFound = true;
+            }
+        }
+
+        cachePrints.push(value.tripId);
+
+        if (!cachePrintFound) {
+            let tripObject = getTripFromID(value.tripId);
+            console.log(`${tripObject.departure} → ${tripObject.destination}`);
+        }
+        
     }
+
+    console.log();
+    console.log(ticketObject.length, "tickets vendus");
 
     menuPrincipal();
 
