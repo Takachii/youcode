@@ -203,16 +203,18 @@ function menuPrincipal()
     console.log("5. Rechercher un ticket");
     console.log("6. Filtrer les trajets");
     console.log("7. Trier les trajets");
+    console.log("8. (BONUS) Afficher total de tickets");
+    console.log("9. (BONUS) Afficher total chiffre d'affaires");
     console.log("0. Quitter");
     console.log();
 
     while(true) {
         
-        let input = prompt("Votre choix : ");
+        let input = prompt("Votre choix : ").trim();
         
         if (input === "0") break;
         else if (input === "1") {
-            listTrips(trips); 
+            listTrips(trips);
             break;
         } else if (input === "2") {
             buyTicket();
@@ -231,6 +233,12 @@ function menuPrincipal()
             break;
         } else if (input === "7") {
             sortTrips();
+            break;
+        } else if (input === "8") {
+            getTotalTickets();
+            break;
+        } else if (input === "9") {
+            getTotalTicketsPrice();
             break;
         }
 
@@ -307,7 +315,7 @@ function buyTicket()
         id: myTicketID,
         passengerName: ticketName,
         tripId: ticketID,
-        seatNumber: 1,
+        seatNumber: 50 - tripObject.availableSeats,
         price: tripObject.price
     })
 
@@ -474,5 +482,17 @@ menuPrincipal();
 
 // Bonus Statistiques
 
-function getTotalTickets() { return tickets.length }
-// console.log("Nombre total de tickets :", getTotalTickets())
+function getTotalTickets() { 
+    console.log();
+    console.log("Nombre total de tickets :", tickets.length);
+    menuPrincipal();
+}
+
+function getTotalTicketsPrice()
+{
+    let total=0;
+    for (let value of tickets) total+=value.price;
+    console.log();
+    console.log(`Chiffre d'affaires total : ${total} DH`);
+    menuPrincipal();
+}
