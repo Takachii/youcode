@@ -471,3 +471,8 @@ function sortTrips()
 }
 
 menuPrincipal();
+
+// Bonus Statistiques
+
+function getTotalTickets() { return tickets.length }
+// console.log("Nombre total de tickets :", getTotalTickets())
