@@ -181,7 +181,7 @@ const trips = [
         departureTime: "19:00",
         arrivalTime: "22:00",
         price: 95,
-        availableSeats: 2
+        availableSeats: 50
     }
 ];
 
@@ -223,6 +223,15 @@ function menuPrincipal()
         } else if (input === "4") {
             deleteTicket()
             break;
+        } else if (input === "5") {
+            findTicket();
+            break;
+        } else if (input === "6") {
+            filterCity();
+            break;
+        } else if (input === "7") {
+            sortTrips();
+            break;
         }
 
     }
@@ -236,8 +245,7 @@ function listTrips(arr)
     console.log("=== TRAJETS DISPONIBLES ===");
 
     for (let i=0; i<arr.length; i++) {
-        console.log();
-        console.log(`#${i+1} ${arr[i].departure} → ${arr[i].destination}`);
+        console.log(`\n#${i+1} ${arr[i].departure} → ${arr[i].destination}`);
         console.log(`Départ : ${arr[i].departureTime}`);
         console.log(`Arrivée : ${arr[i].arrivalTime}`);
         console.log(`Prix : ${arr[i].price} DH`);
@@ -260,21 +268,14 @@ function buyTicket()
     let ticketID, ticketName;
 
     while(true) {
-
-        ticketName = prompt("Nom du passager : ");
-        if (ticketName.length === 0) {
-            console.log("Veuillez écrire le nom correctement !");
-        } else {
-            ticketName = ticketName.trim()
-            break;
-        }
-
+        ticketName = prompt("Nom du passager : ").trim();
+        if (ticketName.length === 0) console.log("Veuillez écrire le nom correctement !");
+        break;
     }
     
     while(true) {
 
-        ticketID = prompt("Identifiant du trajet : ");
-        ticketID = Number(ticketID)
+        ticketID = Number(prompt("Identifiant du trajet : "));
     
         if (ticketID <= 0 )  {
             console.log("Veuillez saisir un numéro valide.");
@@ -373,8 +374,7 @@ function deleteTicket()
 
     let ticketID;
     while(true) {
-        ticketID = prompt("Identifiant du ticket : ");
-        ticketID = Number(ticketID)
+        ticketID = Number(prompt("Identifiant du ticket : "));
         break;
     }
 
@@ -396,6 +396,76 @@ function deleteTicket()
 
     console.log();
     console.log("Ticket annulé avec succès.");
+    menuPrincipal();
+
+}
+
+function findTicket()
+{
+    
+    let passagerName;
+    while(true) {
+        passagerName = prompt("Nom du passager : ").trim();
+        break;
+    }
+
+    for (let value of tickets) {
+        if (value.passengerName === passagerName) {
+            let tripObject = getTripFromID(value.tripId);
+            if (tripObject) {
+                console.log();
+                console.log(`Ticket #${value.id}`);
+                console.log(`Passager : ${value.passengerName}`);
+                console.log(`Trajet : ${tripObject.departure} → ${tripObject.destination}`);
+                console.log(`Place : ${value.seatNumber}`);
+                console.log(`Prix : ${value.price} DH`);
+            }
+        }
+    }
+
+    menuPrincipal();
+
+}
+
+function filterCity()
+{
+
+    let cityName;
+    while(true) {
+        cityName = prompt("Ville de départ : ").trim().toLowerCase();
+        cityName = cityName[0].toUpperCase() + cityName.slice(1)
+        break;
+    }
+
+    console.log();
+
+    for (let value of trips) {
+        if (value.departure===cityName) console.log(`${value.departure} → ${value.destination} : ${value.price} DH`);
+    }
+
+    menuPrincipal();
+
+}
+
+function sortTrips()
+{
+
+    let result=[];
+    for (let value of trips) result.push(value);
+    
+    for (let i=0; i<result.length; i++) {
+        for (let j=0; j<result.length - i - 1; j++) {
+            if (result[j].price > result[j+1].price) {
+                let temp = result[j];
+                result[j] = result[j+1];
+                result[j+1] = temp;
+            }
+        }
+    }
+
+    console.log();
+    for (let value of result) console.log(`${value.departure} → ${value.destination} : ${value.price} DH`);
+
     menuPrincipal();
 
 }
