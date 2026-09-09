@@ -205,13 +205,14 @@ function menuPrincipal()
     console.log("7. Trier les trajets");
     console.log("8. (BONUS) Afficher total de tickets");
     console.log("9. (BONUS) Afficher total chiffre d'affaires");
+    console.log("10. (BONUS) Afficher trajet le plus vendu");
+    
     console.log("0. Quitter");
     console.log();
 
     while(true) {
         
         let input = prompt("Votre choix : ").trim();
-        
         if (input === "0") break;
         else if (input === "1") {
             listTrips(trips);
@@ -239,6 +240,9 @@ function menuPrincipal()
             break;
         } else if (input === "9") {
             getTotalTicketsPrice();
+            break;
+        } else if (input === "10") {
+            getTopTicketSells();
             break;
         }
 
@@ -478,11 +482,10 @@ function sortTrips()
 
 }
 
-menuPrincipal();
-
 // Bonus Statistiques
 
-function getTotalTickets() { 
+function getTotalTickets() 
+{
     console.log();
     console.log("Nombre total de tickets :", tickets.length);
     menuPrincipal();
@@ -496,3 +499,36 @@ function getTotalTicketsPrice()
     console.log(`Chiffre d'affaires total : ${total} DH`);
     menuPrincipal();
 }
+
+function getTotalTicketsFromTripID(id)
+{
+    let total=0;
+    for (let value of tickets) if (value.tripId === id) total++;
+    return total;
+}
+
+function getTopTicketSells()
+{
+
+    let top = 0;
+    let ticketObject=null;
+
+    for (let value of tickets) {
+        if (getTotalTicketsFromTripID(value.tripId) > top) {
+            top = getTotalTicketsFromTripID(value.tripId);
+            ticketObject = value;
+        }
+    }
+
+    if (ticketObject) {
+        let tripObject = getTripFromID(ticketObject.tripId);
+        console.log("\nTrajet le plus vendu :\n");
+        console.log(`${tripObject.departure} → ${tripObject.destination}`);
+        console.log(top, "tickets vendus")
+    }
+
+    menuPrincipal();
+
+}
+
+menuPrincipal();
