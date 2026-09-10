@@ -271,7 +271,7 @@ function generateNexTicketID() {
 function buyTicket() 
 {
 
-    let ticketID, ticketName;
+    let tripID, ticketName;
 
     while(true) {
         ticketName = prompt("Nom du passager : ").trim().toLowerCase();
@@ -285,9 +285,9 @@ function buyTicket()
     
     while(true) {
 
-        ticketID = Number(prompt("Identifiant du trajet : "));
+        tripID = Number(prompt("Identifiant du trajet : "));
     
-        if (ticketID <= 0 )  {
+        if (tripID <= 0 )  {
             console.log("Veuillez saisir un numéro valide.");
         } else {
             break;
@@ -295,7 +295,7 @@ function buyTicket()
 
     }
 
-    let tripObject = getTripFromID(ticketID);
+    let tripObject = getTripFromID(tripID);
 
     if (!tripObject || typeof tripObject !== "object") {
         console.log();
@@ -311,10 +311,10 @@ function buyTicket()
 
     tripObject.availableSeats-=1;
 
-    let myTicketID = generateNexTicketID();
+    let ticketID = generateNexTicketID();
     
     tickets.push({
-        id: myTicketID,
+        id: ticketID,
         passengerName: ticketName,
         tripId: ticketID,
         seatNumber: 50 - tripObject.availableSeats,
@@ -326,7 +326,7 @@ function buyTicket()
     console.log();
 
     for (let value of tickets) {
-        if (value.id === myTicketID) {
+        if (value.id === ticketID) {
             console.log(`Ticket #${value.id}`);
             console.log(`Passager : ${value.passengerName}`);
             console.log(`Trajet : ${tripObject.departure} → ${tripObject.destination}`);
@@ -541,5 +541,28 @@ function getTopTicketSells()
     console.log(ticketObject.length, "tickets vendus");
 
 }
+
+function insertedTicket(tripID, count) {
+        
+    for (let i=1; i<=count; i++) {
+
+        let tripObject = getTripFromID(tripID);
+        tripObject.availableSeats -= 1;
+    
+        let ticketID = generateNexTicketID();
+        
+        tickets.push({
+            id: ticketID,
+            passengerName: "Test Name "+i,
+            tripId: tripID,
+            seatNumber: 50 - tripObject.availableSeats,
+            price: tripObject.price
+        })
+
+    }
+
+}
+
+insertedTicket(1, 4)
 
 menuPrincipal();
