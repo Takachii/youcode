@@ -450,6 +450,7 @@ function filterCity()
     let cityName;
     while(true) {
         cityName = prompt("Ville de départ : ").trim().toLowerCase();
+        if (cityName.length === 0) continue;
         cityName = cityName[0].toUpperCase() + cityName.slice(1).toLowerCase()
         break;
     }
