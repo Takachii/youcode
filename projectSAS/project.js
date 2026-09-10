@@ -262,6 +262,12 @@ function getTripFromID(id)
     return false;
 }
 
+let cacheTicketID=1;
+function generateNexTicketID() {
+    if (tickets.length === 0) cacheTicketID = 1;
+    return cacheTicketID++ 
+}
+
 function buyTicket() 
 {
 
@@ -305,7 +311,7 @@ function buyTicket()
 
     tripObject.availableSeats-=1;
 
-    let myTicketID = tickets.length + 1;
+    let myTicketID = generateNexTicketID();
     
     tickets.push({
         id: myTicketID,
