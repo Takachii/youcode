@@ -398,6 +398,9 @@ function deleteTicket()
         menuPrincipal();
     }
 
+    let tripObject = getTripFromID(ticketObject.tripId);
+    if (tripObject) tripObject.availableSeats+=1;
+
     let ticketIndex = getTicketIndexFromID(ticketID);
     if (ticketIndex === -1) {
         console.log();
