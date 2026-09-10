@@ -422,6 +422,7 @@ function findTicket()
     let passagerName;
     while(true) {
         passagerName = prompt("Nom du passager : ").trim().toLowerCase();
+        if (passagerName.length === 0) continue;
         passagerName = passagerName[0].toUpperCase() + passagerName.slice(1).toLowerCase()
         break;
     }
